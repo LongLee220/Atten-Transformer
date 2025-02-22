@@ -43,7 +43,6 @@ Below are the required Python packages and their versions:
 | `logzero`       | 1.7.0      |
 | `networkx`      | 3.1        |
 | `pandas`        | 2.0.3      |
-| `pykan`         | 0.2.8      |
 | `pyyaml`        | 6.0.2      |
 | `scikit-learn`  | 1.3.2      |
 | `matplotlib`    | 3.8.0      |
