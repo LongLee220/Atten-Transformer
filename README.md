@@ -11,7 +11,7 @@ This project implements the Atten-LSTM model, a temporal attention-based LSTM fr
 2. [Environment Requirements](#environment-requirements)
 3. [Installation Instructions](#installation-instructions)
 4. [Data](#data)
-5. [Preprocessing](#dataset processed)
+5. [Preprocessing](#paraments)
 6. [Run](#run)
 7. [Result](#result)
 
@@ -103,7 +103,7 @@ Extract `App_usage_trace.txt` and put in in the `./Tsinghua/data` directory.
 ```
 
 
-## Preprocessing
+## paraments
 If you want to change sequence length, change `--seq_length` in main.py.
 If you want to change split method, change `--split` in main.py.
 
