@@ -1,6 +1,6 @@
-# Atten-LSTM: Temporal Attention-Based LSTM for App Usage Prediction
+# Atten-Transformer: A Deep Learning Framework for User App Usage Prediction
 
-This project implements the Atten-LSTM model, a temporal attention-based LSTM framework designed to improve app usage prediction by integrating time encoding and traffic-aware features.
+This project implements the Atten-Transformer model, a temporal attention-based Transformer framework designed to improve app usage prediction by integrating temporal encoding and feature encoding.
 
 <img src=Atten_model.jpg width=900>
 
