@@ -30,7 +30,7 @@ def parse_args():
     parser.add_argument('--dim', type=int, default=128, help="Embedding size for users and apps")
     parser.add_argument('--seq_length', type=int, default=8, help="Length of the app usage sequence")
     parser.add_argument('--lr', type=float, default=0.01, help="Learning rate")
-    parser.add_argument('--split', type=str, default='stand', help="Data split method: cold, or stand")
+    parser.add_argument('--split', type=str, default='stand', help="Data split method: time, cold, or stand")
     parser.add_argument('--seed', type=int, default=2025, help="Random seed")
 
     return parser.parse_args()
@@ -120,7 +120,7 @@ def main():
     elif args.split == 'cold':
         cold_processed(args.seq_length)
     else:
-        print('no split method!!!!')
+        time_processed(args.seq_length)
 
     print("Loading dataset...")
     train_dataset = graph_seq(args.split, path=f'./data/{args.split}/train.txt', mode='train')
