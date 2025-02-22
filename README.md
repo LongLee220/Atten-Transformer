@@ -101,7 +101,7 @@ Extract `App_usage_trace.txt` and put in in the `./Tsinghua/data` directory.
     year      = 2021
   }
 ```
-
+Extract `lsapp.tsv` and put in in the `./LSapp/data` directory.
 
 ## paraments
 If you want to change sequence length, change `--seq_length` in main.py.
