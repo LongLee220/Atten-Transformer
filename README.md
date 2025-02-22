@@ -2,7 +2,7 @@
 
 This project implements the Atten-LSTM model, a temporal attention-based LSTM framework designed to improve app usage prediction by integrating time encoding and traffic-aware features.
 
-<img src=Atten_model.jpg width=600>
+<img src=Atten_model.jpg width=900>
 
 ---
 
