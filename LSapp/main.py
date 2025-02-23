@@ -130,7 +130,7 @@ def main():
 
     # Model selection
     num_users = len(open(os.path.join(f'./data/{args.split}', 'user2id.txt'), 'r').readlines()) + (1 if args.split == 'cold' else 0)
-    num_apps = len(open(os.path.join('./data/{args.split}', 'app2id.txt'), 'r').readlines())
+    num_apps = len(open(os.path.join(f'./data/{args.split}', 'app2id.txt'), 'r').readlines())
 
     print(f"Initializing {args.model_name} model...")
     model = Transformer_GCN(num_users, num_apps, args.dim, args.seq_length) if args.model_name == 'Transformer' else print('No model!!!')
