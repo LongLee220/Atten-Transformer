@@ -27,7 +27,7 @@ def parse_args():
     parser.add_argument('--epoch', type=int, default=50, help="Number of epochs")
     parser.add_argument('--batch_size', type=int, default=512, help="Batch size")
     parser.add_argument('--dim', type=int, default=128, help="Embedding size for users and apps")
-    parser.add_argument('--seq_length', type=int, default=8, help="Length of the app usage sequence")
+    parser.add_argument('--seq_length', type=int, default=5, help="Length of the app usage sequence")
     parser.add_argument('--lr', type=float, default=0.01, help="Learning rate")
     parser.add_argument('--split', type=str, default='stand', help="Data split method: cold, or stand")
     parser.add_argument('--seed', type=int, default=2025, help="Random seed")
