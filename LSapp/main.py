@@ -16,7 +16,6 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from model.Transformer import Transformer_GCN
 from graph import graph_seq
-from split_time import time_processed
 from split_stand import stand_processed
 from split_cold import cold_processed
 
