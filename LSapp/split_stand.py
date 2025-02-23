@@ -90,8 +90,8 @@ def stand_processed(seq_length, file_path="./data/lsapp.tsv"):
             for k, v in dic.items():
                 f.write("{}\t{}\n".format(k, v))
 
-    dict2file(user2id, "./data/user2id.txt")
-    dict2file(app2id, "./data/app2id.txt")
+    dict2file(user2id, "./data/stand/user2id.txt")
+    dict2file(app2id, "./data/stand/app2id.txt")
 
     # Map users and apps to IDs
     df_processed['user'] = df_processed['user_id'].apply(lambda x: user2id[x])
@@ -129,6 +129,6 @@ def stand_processed(seq_length, file_path="./data/lsapp.tsv"):
     test.drop(columns=['timestamp'], inplace=True)
 
     # Save final datasets
-    train.to_csv('./data/train.txt', sep='\t', index=False)
-    validation.to_csv('./data/validation.txt', sep='\t', index=False)
-    test.to_csv('./data/test.txt', sep='\t', index=False)
+    train.to_csv('./data/stand/train.txt', sep='\t', index=False)
+    validation.to_csv('./stand/data/validation.txt', sep='\t', index=False)
+    test.to_csv('./data/stand/test.txt', sep='\t', index=False)
