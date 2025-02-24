@@ -86,11 +86,11 @@ def cold_processed(seq_length, file_path="./data/lsapp.tsv"):
     train_users, test_users = train_test_split(users, test_size=0.1, random_state=42)  # 90% train, 10% cold-start test users
 
     # Further split train users into train/validation (90%/10%)
-    train_users, valid_users = train_test_split(train_users, test_size=0.1, random_state=42)
+    #train_users, valid_users = train_test_split(train_users, test_size=0.1, random_state=42)
 
     # Split data by users
     train_data = df_processed[df_processed['user_id'].isin(train_users)].copy()
-    valid_data = df_processed[df_processed['user_id'].isin(valid_users)].copy()
+    #valid_data = df_processed[df_processed['user_id'].isin(valid_users)].copy()
     test_data = df_processed[df_processed['user_id'].isin(test_users)].copy()  # Cold-start test users
 
     # Map user IDs (only for training users)
@@ -99,7 +99,7 @@ def cold_processed(seq_length, file_path="./data/lsapp.tsv"):
 
     # Process user IDs
     train_data["user"] = train_data["user_id"].map(user2id)
-    valid_data["user"] = valid_data["user_id"].apply(lambda x: user2id.get(x, max_user_id))  # Unknown users mapped to max ID
+    #valid_data["user"] = valid_data["user_id"].apply(lambda x: user2id.get(x, max_user_id))  # Unknown users mapped to max ID
     test_data["user"] = test_data["user_id"].apply(lambda x: user2id.get(x, max_user_id))  # Cold-start users mapped to max ID
 
     # Map application IDs
@@ -110,21 +110,21 @@ def cold_processed(seq_length, file_path="./data/lsapp.tsv"):
 
     # Process `app_seq`
     train_data["app_seq"] = train_data["app_seq"].apply(lambda x: [app2id[c] for c in x])
-    valid_data["app_seq"] = valid_data["app_seq"].apply(lambda x: [app2id.get(c, 0) for c in x])
+    #valid_data["app_seq"] = valid_data["app_seq"].apply(lambda x: [app2id.get(c, 0) for c in x])
     test_data["app_seq"] = test_data["app_seq"].apply(lambda x: [app2id.get(c, 0) for c in x])
 
     train_data["app"] = train_data["next_app"].map(app2id)
-    valid_data["app"] = valid_data["next_app"].apply(lambda x: app2id.get(x, 0))
+    #valid_data["app"] = valid_data["next_app"].apply(lambda x: app2id.get(x, 0))
     test_data["app"] = test_data["next_app"].apply(lambda x: app2id.get(x, 0))
 
     # Remove `timestamp` and `user_id`
     train_data.drop(columns=['timestamp', 'user_id'], inplace=True)
-    valid_data.drop(columns=['timestamp', 'user_id'], inplace=True)
+    #valid_data.drop(columns=['timestamp', 'user_id'], inplace=True)
     test_data.drop(columns=['timestamp', 'user_id'], inplace=True)
 
     # Save datasets
     train_data.to_csv('./data/cold/train.txt', sep='\t', index=False)
-    valid_data.to_csv('./data/cold/valid.txt', sep='\t', index=False)
+    #valid_data.to_csv('./data/cold/valid.txt', sep='\t', index=False)
     test_data.to_csv('./data/cold/test.txt', sep='\t', index=False)
 
     # Save user2id and app2id mappings
