@@ -44,7 +44,7 @@ class KernelFeatureEncoder(nn.Module):
             raise ValueError("Unsupported kernel type")
 
 class Transformer_GCN(nn.Module):
-    def __init__(self, n_users, n_apps, hid_dim, seq_len=4, num_heads=4, num_layers=2, dropout=0.2):
+    def __init__(self, n_users, n_apps, hid_dim, seq_len, num_heads=4, num_layers=2, dropout=0.2):
         super(Transformer_GCN, self).__init__()
 
         self.seq_len = seq_len
@@ -52,54 +52,45 @@ class Transformer_GCN(nn.Module):
         self.kernel_encoder = KernelFeatureEncoder(2, hid_dim, kernel_type='fourier')
         self.user_emb = nn.Embedding(n_users, hid_dim)
 
-        self.time_embedding = nn.Linear(24, hid_dim)  # Time encoding
+        self.time_embedding = nn.Linear(24, hid_dim*2)  
 
         # Transformer Encoder
         encoder_layers = TransformerEncoderLayer(d_model=hid_dim, nhead=num_heads, dropout=dropout, batch_first=True)
         self.transformer_encoder = TransformerEncoder(encoder_layers, num_layers)
 
-        self.combined_linear = nn.Linear(hid_dim*2, hid_dim, bias=True)
-
-        self.classifier = nn.Linear(hid_dim, n_apps, bias=True)
+        self.classifier = nn.Linear(hid_dim * 2, n_apps, bias=True)
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x, y, u, t, mode='train'):
 
-        # Kernel feature encoding
         x = self.kernel_encoder(x)  # (batch, hid_dim)
-
-        # User embedding
         user_vec = self.user_emb(u)  # (batch, hid_dim)
 
         batch_size = u.shape[0]  
         x = x.view(batch_size, self.seq_len, -1) 
 
-        # Transformer encoding
-        x = self.transformer_encoder(x)  # (batch, seq_len, hid_dim)
+        x = self.transformer_encoder(x)  # (batch, seq_len=1, hid_dim)
 
-        # Process time features
+
         time_weights = torch.sigmoid(self.time_embedding(t))  # (batch, hid_dim)
 
-        # Aggregate sequence representations
         app_vector = torch.mean(x, dim=1)  # (batch, hid_dim)
         user_vec = user_vec.squeeze(1) 
         combined_vec = torch.cat([app_vector, user_vec], dim=-1)
         combined_vec = self.dropout(combined_vec)
 
-        user_vector = F.relu(self.combined_linear(combined_vec))
         
         time_weights = time_weights.squeeze(1) 
 
-        # Time-weighted feature fusion
-        final_out = F.relu(user_vector * time_weights)
-
-        # Compute final predictions
+        final_out = F.relu(combined_vec * time_weights)
+        #print(final_out.shape)
         out = self.dropout(final_out)
         scores = self.classifier(out)
 
         if mode == 'predict':
             loss = torch.mean(F.cross_entropy(scores, y.view(-1), reduction='none'))
-            return scores, loss
+            return scores,loss
+
         else:
             loss = torch.mean(F.cross_entropy(scores, y.view(-1), reduction='none'))
             return loss
