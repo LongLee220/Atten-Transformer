@@ -19,7 +19,7 @@ This project implements the Atten-Transformer model, a temporal attention-based 
 
 ## Overview
 
-Accurately predicting app usage patterns can significantly enhance user experience and system performance by preloading app-related resources, reducing startup latency, and improving energy efficiency. Atten-LSTM combines a Long Short-Term Memory (LSTM) network with a temporal attention mechanism to prioritize the most informative app usage sequences, significantly improving prediction accuracy.
+Accurately predicting app usage patterns can significantly enhance user experience and system performance by preloading app-related resources, reducing startup latency, and improving energy efficiency. Atten-Transformer combines a Transformer with a temporal attention mechanism to prioritize the most informative app usage sequences, significantly improving prediction accuracy.
 
 ---
 
