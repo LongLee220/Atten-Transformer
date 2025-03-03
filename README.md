@@ -14,6 +14,7 @@ This project implements the Atten-Transformer model, a temporal attention-based 
 5. [Preprocessing](#paraments)
 6. [Run](#run)
 7. [Result](#result)
+8. [Citing](#citing)
 
 ---
 
@@ -170,3 +171,16 @@ python main.py
 | **NeuSA**          | 0.6832 | 0.8253 | 0.8830 | 0.7461 | 0.7593 | 0.6832 | 0.8253 | 0.8830 | 0.7461 | 0.7593 |
 | **MAPLE**          | 0.7157 | 0.8649 | 0.9150 | 0.7821 | 0.7936 | 0.7171 | 0.8670 | 0.9166 | 0.7836 | 0.7950 |
 | **Atten-Transformer** | **0.8115** | **0.9494** | **0.9667** | **0.8767** | **0.8807** | **0.8480** | **0.9662** | **0.9807** | **0.9042** | **0.9075** |
+
+
+## Citing
+
+If you find our codes useful in your research, please consider citing:
+
+```bibtex
+@article{li2025atten,
+  title={Atten-Transformer: A Deep Learning Framework for User App Usage Prediction},
+  author={Li, Longlong and Qu, Cunquan and Wang, Guanghui},
+  journal={arXiv preprint arXiv:2502.16957},
+  year={2025}
+}
