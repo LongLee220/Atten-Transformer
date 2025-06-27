@@ -19,7 +19,7 @@ class AppUsageFEDformer(nn.Module):
 
         # --- App ID + Time embedding ---
         self.app_emb = nn.Embedding(configs['app_vocab_size'], self.d_model)
-        self.time_emb = nn.Linear(configs['time_feat_dim'], self.d_model)
+        self.time_emb = nn.Linear(1, self.d_model)
 
         # --- Select attention block (Fourier or Wavelet) ---
         if version == 'Wavelets':
@@ -34,12 +34,11 @@ class AppUsageFEDformer(nn.Module):
 
         # --- Encoder ---
         self.encoder = Encoder(
-            [
+            attn_layers=[
                 EncoderLayer(
                     AutoCorrelationLayer(attn_block, configs['d_model'], configs['n_heads']),
                     configs['d_model'],
                     configs['d_ff'],
-                    moving_avg=configs['moving_avg'],
                     dropout=configs['dropout'],
                     activation=configs['activation']
                 )
@@ -55,13 +54,13 @@ class AppUsageFEDformer(nn.Module):
         # x_app: [B, L]          -> App ID
         # x_time: [B, L, D_time] -> Time features
         x_app = x_app.to(dtype=torch.long)
+        x_time = x_time.unsqueeze(-1)
         app_emb = self.app_emb(x_app)          # [B, L, D]
         time_emb = self.time_emb(x_time)       # [B, L, D]
-        return app_emb[:, -1, :]  + time_emb              # [B, L, D]
+        return app_emb + time_emb              # [B, L, D]
 
     def forward(self, x_app, x_time, time_vecs, targets, mode):
         x = self.encode_input(x_app, x_time)          # [B, L, D]
-        x = x.unsqueeze(1)
         enc_out, _ = self.encoder(x, attn_mask=None)  # [B, L, D]
         last_token = enc_out[:, -1, :]                # [B, D]
         out = torch.cat((last_token, time_vecs[:, -1, :] ), dim=1)
