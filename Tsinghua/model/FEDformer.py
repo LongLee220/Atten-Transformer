@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from layers.Transformer_EncDec import Encoder, EncoderLayer
+from layers.Transformer_EncDec_fed import Encoder, EncoderLayer
 from layers.Autoformer_EncDec import my_Layernorm
 from layers.AutoCorrelation import AutoCorrelationLayer
 from layers.FourierCorrelation import FourierBlock
