@@ -7,14 +7,14 @@ from sklearn.preprocessing import LabelEncoder
 import torch
 from tqdm import tqdm
 
-# 1. 加载并预处理数据
+
 df = pd.read_csv('data/App_usage_trace.txt', sep=' ', names=['user', 'time', 'location', 'app', 'traffic'])
 df = df[['user', 'time', 'app']]
 df['time'] = df['time'].astype(str).str[:-2]
 df.drop_duplicates(inplace=True)
 df = df[df.groupby('app')['app'].transform('count') >= 10]
 
-# 2. 构造序列和最近使用记录
+
 seq_length = 8
 prev_user, prev_time = None, None
 app_seq, recent_apps = [], []
@@ -52,17 +52,17 @@ df['recent_apps'] = all_recent_apps
 df = df[df['app_seq'].map(len) > 0]
 df = df[df.groupby('user')['user'].transform('count') >= 50]
 
-# 3. 编码 app
+
 encoder = LabelEncoder()
 df['app_encoded'] = encoder.fit_transform(df['app'])
 num_classes = len(encoder.classes_)
 
-# 4. 划分训练 / 测试
+
 df['time'] = df['time'].astype(int)
 df_train = df[df['time'] <= 201604251200]
 df_test = df[df['time'] > 201604251200]
 
-# 5. MFU 构建分数
+
 user_counter = {}
 for _, row in df_train.iterrows():
     user = row['user']
@@ -80,7 +80,7 @@ for _, row in df_test.iterrows():
             score[idx] = 1 / (i + 1)
     mfu_scores.append(score)
 
-# 6. MRU 构建分数
+
 mru_scores, mru_targets = [], []
 for _, row in df_test.iterrows():
     app = row['app']
@@ -92,7 +92,7 @@ for _, row in df_test.iterrows():
         score[idx] = 1 / (i + 1)
     mru_scores.append(score)
 
-# 7. 评估函数
+
 def compute_metrics(scores, targets, top_k):
     hr, dcg, ndcg, mrr = [], [], [], []
     _, pred_idx = scores.topk(max(top_k), dim=1)
@@ -117,7 +117,7 @@ def compute_metrics(scores, targets, top_k):
 
     return hr, dcg, ndcg, mrr
 
-# 8. 执行评估
+
 topk = [1, 3, 5]
 mfu_scores = torch.stack(mfu_scores)
 mfu_targets = torch.tensor(mfu_targets)
@@ -127,7 +127,7 @@ mru_targets = torch.tensor(mru_targets)
 mfu_hr, mfu_dcg, mfu_ndcg, mfu_mrr = compute_metrics(mfu_scores, mfu_targets, topk)
 mru_hr, mru_dcg, mru_ndcg, mru_mrr = compute_metrics(mru_scores, mru_targets, topk)
 
-# 9. 输出结果
+
 for i, k in enumerate(topk):
     print(f"[MFU]  HR@{k}: {mfu_hr[i]:.4f}, nDCG@{k}: {mfu_ndcg[i]:.4f}, MRR@{k}: {mfu_mrr[i]:.4f}")
     print(f"[MRU]  HR@{k}: {mru_hr[i]:.4f}, nDCG@{k}: {mru_ndcg[i]:.4f}, MRR@{k}: {mru_mrr[i]:.4f}")
